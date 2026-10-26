@@ -1,0 +1,99 @@
+/* Biblioteca Pro-Gramers — estilos comunes del mockup
+   Color principal: marrón biblioteca (#7a4e2d) */
+:root {
+  --biblio: #7a4e2d;
+  --biblio-oscuro: #5f3c22;
+  --biblio-claro: #f3e9de;
+}
+
+body {
+  background-color: #f7f4ef;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main { flex: 1; }
+
+/* Navbar */
+.navbar-biblio { background-color: #2b2019; }
+.navbar-biblio .navbar-brand i { color: #d9a66b; }
+.navbar-biblio .nav-link {
+  color: rgba(255, 255, 255, .7);
+  border-bottom: 3px solid transparent;
+  padding-bottom: .35rem;
+}
+.navbar-biblio .nav-link:hover { color: #fff; }
+.navbar-biblio .nav-link.active {
+  color: #fff;
+  font-weight: 600;
+  border-bottom-color: #d9a66b;
+}
+
+/* Color principal sobre los componentes de Bootstrap */
+.btn-primary {
+  --bs-btn-bg: var(--biblio);
+  --bs-btn-border-color: var(--biblio);
+  --bs-btn-hover-bg: var(--biblio-oscuro);
+  --bs-btn-hover-border-color: var(--biblio-oscuro);
+  --bs-btn-active-bg: var(--biblio-oscuro);
+  --bs-btn-active-border-color: var(--biblio-oscuro);
+  --bs-btn-disabled-bg: #b9a493;
+  --bs-btn-disabled-border-color: #b9a493;
+}
+.btn-outline-primary {
+  --bs-btn-color: var(--biblio);
+  --bs-btn-border-color: var(--biblio);
+  --bs-btn-hover-bg: var(--biblio);
+  --bs-btn-hover-border-color: var(--biblio);
+}
+.text-biblio { color: var(--biblio) !important; }
+
+/* Encabezado de página (título + acción) */
+.encabezado {
+  border-bottom: 1px solid #e5ddd2;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Tarjetas */
+.card { border: 0; box-shadow: 0 2px 10px rgba(0, 0, 0, .06); }
+.card-acceso .icono {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  background-color: var(--biblio-claro);
+  color: var(--biblio);
+}
+.card-acceso .contador { font-size: 2rem; font-weight: 700; line-height: 1; }
+
+/* Tablas */
+.table thead th {
+  font-size: .8rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: #6c757d;
+  background-color: #fbf8f4;
+}
+.table td { vertical-align: middle; }
+
+footer { color: #9a8f84; font-size: .85rem; }
+
+/* Listados de solo lectura (Autores, Usuarios, Préstamos) */
+.aviso-lectura { font-size: .85rem; }
+
+/* Formularios con el color principal */
+.form-control:focus, .form-select:focus {
+  border-color: #c4a07f;
+  box-shadow: 0 0 0 .25rem rgba(122, 78, 45, .2);
+}
+.form-check-input:checked { background-color: var(--biblio); border-color: var(--biblio); }
+.breadcrumb a { color: var(--biblio); text-decoration: none; }
+
+/* Opciones elegidas en el selector múltiple de autores */
+select[multiple] option:checked {
+  background: linear-gradient(var(--biblio-claro), var(--biblio-claro));
+  color: var(--biblio-oscuro);
+  font-weight: 600;
+}
