@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+  <!--  MENÚ COMÚN -->
+  <nav th:fragment="menu(activo)" class="navbar navbar-expand-lg navbar-dark navbar-biblio">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" th:href="@{/}">
+        <i class="bi bi-book-half me-2"></i>Biblioteca Pro-Gramers
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+              aria-controls="menuPrincipal" aria-expanded="false" aria-label="Mostrar menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menuPrincipal">
+        <ul class="navbar-nav ms-auto gap-lg-2">
+          <li class="nav-item"><a class="nav-link" th:href="@{/}" th:classappend="${activo == 'inicio'} ? 'active'"><i class="bi bi-house-door me-1"></i>Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/libros}" th:classappend="${activo == 'libros'} ? 'active'"><i class="bi bi-book me-1"></i>Libros</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/autores}" th:classappend="${activo == 'autores'} ? 'active'"><i class="bi bi-person-badge me-1"></i>Autores</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/usuarios}" th:classappend="${activo == 'usuarios'} ? 'active'"><i class="bi bi-people me-1"></i>Usuarios</a></li>
+          <li class="nav-item"><a class="nav-link" th:href="@{/prestamos}" th:classappend="${activo == 'prestamos'} ? 'active'"><i class="bi bi-arrow-left-right me-1"></i>Préstamos</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</body>
+</html>
