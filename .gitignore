@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Configuracion local con contrasenas
+.env
