@@ -1,0 +1,37 @@
+name: biblioteca-producto2
+
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: biblioteca
+      MYSQL_USER: biblioteca_app
+      MYSQL_PASSWORD: ${BIBLIOTECA_DB_PASSWORD:?Configura BIBLIOTECA_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${BIBLIOTECA_ROOT_PASSWORD:?Configura BIBLIOTECA_ROOT_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/data.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'mysql --protocol=TCP -h 127.0.0.1 -u"$${MYSQL_USER}" -p"$${MYSQL_PASSWORD}" "$${MYSQL_DATABASE}" -e "SELECT 1"'
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:8081:8081"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/biblioteca
+      DB_USER: biblioteca_app
+      DB_PASSWORD: ${BIBLIOTECA_DB_PASSWORD:?Configura BIBLIOTECA_DB_PASSWORD}
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
