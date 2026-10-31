@@ -102,16 +102,17 @@ public class Prestamo {
         this.libro = libro;
     }
 
+    // Devuelve el sufijo de la clave prestamo.estado.* de messages.properties
     public String getEstadoVisual() {
         if (fechaDevolucion != null) {
-            return "Devuelto";
+            return "devuelto";
         }
 
         if (fechaDevolucionPrevista != null
                 && fechaDevolucionPrevista.isBefore(LocalDate.now())) {
-            return "Retrasado";
+            return "retrasado";
         }
 
-        return "Pendiente";
+        return "pendiente";
     }
 }

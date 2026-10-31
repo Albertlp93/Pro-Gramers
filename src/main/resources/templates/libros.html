@@ -35,7 +35,8 @@
             <p class="text-secondary">Catálogo de la biblioteca</p>
         </div>
 
-        <a th:href="@{/libros/nuevo}" class="btn btn-primary">
+        <a th:href="@{/libros/nuevo}" class="btn btn-primary"
+           th:text="#{libro.boton.nuevo}">
             Nuevo libro
         </a>
     </div>
@@ -69,7 +70,8 @@
                         </div>
 
                         <span th:if="${#sets.isEmpty(libro.autores)}"
-                              class="text-secondary">
+                              class="text-secondary"
+                              th:text="#{libro.sinAutores}">
                             Sin autores asignados
                         </span>
                     </td>
@@ -86,26 +88,28 @@
                     <td>
                         <div class="d-flex gap-2">
                             <a th:href="@{/libros/{id}/editar(id=${libro.id})}"
-                            class="btn btn-sm btn-outline-primary">
+                            class="btn btn-sm btn-outline-primary"
+                            th:text="#{boton.editar}">
                                 Editar
                             </a>
 
-                            <form th:action="@{/libros/{id}/eliminar(id=${libro.id})}"
-                                method="post"
-                                onsubmit="return confirm('¿Quieres eliminar este libro? Esta acción no se puede deshacer.');">
-
-                                <button type="submit"
-                                        class="btn btn-sm btn-outline-danger">
-                                    Eliminar
-                                </button>
-                            </form>
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalEliminar"
+                                    th:data-url="@{/libros/{id}/eliminar(id=${libro.id})}"
+                                    th:data-titulo="${libro.titulo}"
+                                    th:text="#{boton.eliminar}">
+                                Eliminar
+                            </button>
                         </div>
                     </td>
                 </tr>
 
                 <tr th:if="${#lists.isEmpty(libros)}">
                     <td colspan="7"
-                        class="text-center text-secondary py-4">
+                        class="text-center text-secondary py-4"
+                        th:text="#{libro.listado.vacio}">
                         No hay libros registrados.
                     </td>
                 </tr>
@@ -119,8 +123,56 @@
         </div>
     </div>
 
+    <!-- Confirmación de borrado: un único modal para todos los libros -->
+    <div class="modal fade" id="modalEliminar" tabindex="-1"
+         aria-labelledby="modalEliminarTitulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="modalEliminarTitulo">
+                        <i class="bi bi-exclamation-triangle text-danger"></i>
+                        <span th:text="#{libro.eliminar.titulo}">Eliminar libro</span>
+                    </h2>
+                    <button type="button" class="btn-close"
+                            data-bs-dismiss="modal" aria-label="Cerrar" th:attr="aria-label=#{boton.cerrar}"></button>
+                </div>
+
+                <div class="modal-body">
+                    <p class="fw-semibold mb-2" id="modalEliminarLibro"></p>
+                    <p class="mb-0" th:text="#{libro.eliminar.validar}">
+                        ¿Seguro que quieres eliminar este libro?
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal"
+                            th:text="#{boton.cancelar}">
+                        Cancelar
+                    </button>
+
+                    <form id="formEliminar" method="post" action="#">
+                        <button type="submit" class="btn btn-danger"
+                                th:text="#{boton.eliminar}">
+                            Eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Al abrir el modal se copian la ruta de borrado y el título del libro pulsado
+    document.getElementById('modalEliminar')
+        .addEventListener('show.bs.modal', function (evento) {
+            const boton = evento.relatedTarget;
+            document.getElementById('formEliminar').action = boton.dataset.url;
+            document.getElementById('modalEliminarLibro').textContent = boton.dataset.titulo;
+        });
+</script>
 </body>
 </html>

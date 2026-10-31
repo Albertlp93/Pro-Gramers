@@ -92,10 +92,42 @@ Los tests (`.\gradlew.bat test`) también necesitan MySQL arrancado y la variabl
 | `/libros` | Listado de libros con sus autores, y botones de editar y eliminar |
 | `/libros/nuevo` | Alta de un libro con validación y selección de autores |
 | `/libros/{id}/editar` | Edición de un libro |
-| `/libros/{id}/eliminar` | Borrado con confirmación. No se permite si el libro tiene préstamos |
+| `/libros/{id}/eliminar` | Borrado tras confirmar en un modal de Bootstrap. No se permite si el libro tiene préstamos |
 | `/autores` | Listado de autores |
 | `/usuarios` | Listado de usuarios |
 | `/prestamos` | Listado de préstamos con su estado (pendiente, retrasado o devuelto) |
+
+
+## Validaciones del formulario de libros:
+Se valida en dos capas. El navegador bloquea los valores con formato incorrecto (`required`, `pattern`, `min`, `max`) y el servidor vuelve a validar siempre, aunque se salte el navegador.
+
+| Campo | Regla | Dónde |
+| --- | --- | --- |
+| Título | Obligatorio, máximo 100 caracteres | `Libro.java` (`@NotBlank`, `@Size`) |
+| ISBN | Obligatorio, exactamente 13 dígitos sin guiones ni espacios | `Libro.java` (`@NotBlank`, `@Pattern`) |
+| ISBN | No puede repetirse | `LibroController` (`existsByIsbn`, `existsByIsbnAndIdNot`) |
+| Año de publicación | Mayor que cero y no posterior al año actual | `Libro.java` (`@Min`) y `LibroController` (`validarAnio`) |
+| Editorial / Género | Máximo 100 / 50 caracteres | `Libro.java` (`@Size`) |
+| Ejemplares disponibles | Obligatorio, 0 o más | `Libro.java` (`@NotNull`, `@Min`) |
+| Autores | Al menos uno | `Libro.java` (`@NotEmpty`) |
+
+Los errores se muestran debajo de cada campo con `th:errors`.
+
+
+## Mensajes de la aplicación (`messages.properties`):
+Los textos de la aplicación están en `src/main/resources/messages.properties`. Spring Boot carga este archivo automáticamente, en UTF-8, sin configuración adicional.
+
+Contiene:
+- Mensajes de validación y avisos de libros (creado, actualizado, eliminado, errores al borrar).
+- Menú de navegación, botones comunes y ayudas de los formularios.
+- Avisos de listados vacíos y estados de préstamo (pendiente, retrasado, devuelto).
+
+Las claves siguen el formato `entidad.campo.regla`, por ejemplo `libro.anio.futuro`. Se usan así:
+- En las anotaciones de validación: `@NotBlank(message = "{libro.isbn.obligatorio}")`.
+- En el controlador: `resultado.rejectValue("isbn", "libro.isbn.duplicado")` o el método `texto("libro.creado")`, que usa `MessageSource`.
+- En las vistas Thymeleaf: `th:text="#{boton.guardar}"`.
+
+Para añadir otro idioma basta con crear `messages_en.properties` con las mismas claves.
 
 
 ## Modelo de datos:
@@ -111,6 +143,7 @@ Los tests (`.\gradlew.bat test`) también necesitan MySQL arrancado y la variabl
 - `src/main/resources/templates/`: vistas Thymeleaf y menú común en `fragments/menu.html`.
 - `src/main/resources/static/css/estilos.css`: estilos de la aplicación.
 - `src/main/resources/application.properties`: puerto 8081 y conexión a MySQL mediante variables de entorno.
+- `src/main/resources/messages.properties`: textos y mensajes de validación de la aplicación.
 - `database/schema.sql`: creación de las tablas a partir del diagrama E/R.
 - `database/data.sql`: datos de ejemplo.
 - `database/corregir_acentos.sql`: corrección de acentos para bases de datos cargadas antes de usar `utf8mb4`.
@@ -128,7 +161,7 @@ La carpeta `build/` y la caché `.gradle/` no deben incluirse en los commits. Lo
 
 
 ## Estado actual del proyecto:
-La aplicación se conecta a MySQL, muestra el inicio con contadores, permite el CRUD completo de libros y lista autores, usuarios y préstamos. Se ejecuta completa con Docker Compose.
+La aplicación se conecta a MySQL, muestra el inicio con contadores, permite el CRUD completo de libros con validaciones y confirmación de borrado, y lista autores, usuarios y préstamos. Los textos se centralizan en `messages.properties`. Se ejecuta completa con Docker Compose.
 
 
 ## Documentación oficial:

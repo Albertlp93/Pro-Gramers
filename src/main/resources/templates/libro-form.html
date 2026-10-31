@@ -25,7 +25,8 @@
             Libro
         </h1>
 
-        <a th:href="@{/libros}" class="btn btn-outline-secondary">
+        <a th:href="@{/libros}" class="btn btn-outline-secondary"
+           th:text="#{boton.volverListado}">
             Volver al listado
         </a>
     </div>
@@ -64,7 +65,7 @@
                            inputmode="numeric"
                            required>
 
-                    <div class="form-text">
+                    <div class="form-text" th:text="#{libro.isbn.ayuda}">
                         Introduce 13 dígitos, sin espacios ni guiones.
                     </div>
 
@@ -131,7 +132,7 @@
                     </option>
                 </select>
 
-                <div class="form-text">
+                <div class="form-text" th:text="#{libro.autores.ayuda}">
                     Mantén pulsada Ctrl para seleccionar varios autores.
                 </div>
 
@@ -155,13 +156,15 @@
                      th:errors="*{ejemplaresDisponibles}"></div>
             </div>
 
-            <p class="text-secondary small">* Campos obligatorios.</p>
+            <p class="text-secondary small" th:text="#{formulario.obligatorios}">* Campos obligatorios.</p>
 
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary"
+                    th:text="#{boton.guardar}">
                 Guardar
             </button>
 
-            <a th:href="@{/libros}" class="btn btn-outline-secondary">
+            <a th:href="@{/libros}" class="btn btn-outline-secondary"
+               th:text="#{boton.cancelar}">
                 Cancelar
             </a>
         </form>

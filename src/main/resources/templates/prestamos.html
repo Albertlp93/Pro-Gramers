@@ -61,19 +61,20 @@
 
                     <td>
                         <span class="badge"
-                              th:classappend="${prestamo.estadoVisual == 'Devuelto'
+                              th:classappend="${prestamo.estadoVisual == 'devuelto'
                                   ? 'bg-success'
-                                  : (prestamo.estadoVisual == 'Retrasado'
+                                  : (prestamo.estadoVisual == 'retrasado'
                                       ? 'bg-danger'
                                       : 'bg-warning text-dark')}"
-                              th:text="${prestamo.estadoVisual}">
+                              th:text="#{${'prestamo.estado.' + prestamo.estadoVisual}}">
                         </span>
                     </td>
                 </tr>
 
                 <tr th:if="${#lists.isEmpty(prestamos)}">
                     <td colspan="6"
-                        class="text-center text-secondary py-4">
+                        class="text-center text-secondary py-4"
+                        th:text="#{prestamo.listado.vacio}">
                         No hay préstamos registrados.
                     </td>
                 </tr>

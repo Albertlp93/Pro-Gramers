@@ -25,19 +25,25 @@ import org.springframework.web.server.ResponseStatusException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+
 @Controller
 @RequestMapping("/libros")
 public class LibroController {
 
     private final LibroRepository libroRepository;
     private final AutorRepository autorRepository;
+    private final MessageSource messageSource;
 
     public LibroController(
             LibroRepository libroRepository,
-            AutorRepository autorRepository) {
+            AutorRepository autorRepository,
+            MessageSource messageSource) {
 
         this.libroRepository = libroRepository;
         this.autorRepository = autorRepository;
+        this.messageSource = messageSource;
     }
 
     @InitBinder("libro")
@@ -79,8 +85,7 @@ public class LibroController {
 
             resultado.rejectValue(
                 "isbn",
-                "isbn.duplicado",
-                "Ya existe un libro con ese ISBN."
+                "libro.isbn.duplicado"
             );
         }
 
@@ -95,7 +100,7 @@ public class LibroController {
 
         redirectAttributes.addFlashAttribute(
             "mensaje",
-            "Libro creado correctamente."
+            texto("libro.creado")
         );
 
         return "redirect:/libros";
@@ -106,7 +111,7 @@ public class LibroController {
             Libro libro = libroRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    "Libro no encontrado."
+                    texto("libro.noEncontrado")
                 ));
 
             model.addAttribute("libro", libro);
@@ -126,7 +131,7 @@ public class LibroController {
         Libro existente = libroRepository.findById(id)
             .orElseThrow(() -> new ResponseStatusException(
                 HttpStatus.NOT_FOUND,
-                "Libro no encontrado."
+                texto("libro.noEncontrado")
             ));
 
         if (!resultado.hasFieldErrors("isbn")
@@ -135,8 +140,7 @@ public class LibroController {
 
             resultado.rejectValue(
                 "isbn",
-                "isbn.duplicado",
-                "Ya existe otro libro con ese ISBN."
+                "libro.isbn.duplicadoOtro"
             );
         }
 
@@ -162,7 +166,7 @@ public class LibroController {
 
         redirectAttributes.addFlashAttribute(
             "mensaje",
-            "Libro actualizado correctamente."
+            texto("libro.actualizado")
         );
 
         return "redirect:/libros";
@@ -176,14 +180,14 @@ public class LibroController {
         if (!libroRepository.existsById(id)) {
             throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND,
-                "Libro no encontrado."
+                texto("libro.noEncontrado")
             );
         }
 
         if (libroRepository.contarPrestamos(id) > 0) {
             redirectAttributes.addFlashAttribute(
                 "error",
-                "No se puede eliminar el libro porque tiene préstamos asociados."
+                texto("libro.eliminar.conPrestamos")
             );
 
             return "redirect:/libros";
@@ -194,12 +198,12 @@ public class LibroController {
 
             redirectAttributes.addFlashAttribute(
                 "mensaje",
-                "Libro eliminado correctamente."
+                texto("libro.eliminado")
             );
         } catch (DataIntegrityViolationException ex) {
             redirectAttributes.addFlashAttribute(
                 "error",
-                "No se puede eliminar el libro porque tiene datos asociados."
+                texto("libro.eliminar.conDatos")
             );
         }
 
@@ -216,9 +220,17 @@ public class LibroController {
 
             resultado.rejectValue(
                 "anioPublicacion",
-                "anio.futuro",
-                "El año no puede ser posterior a " + anioActual + "."
+                "libro.anio.futuro",
+                new Object[] { String.valueOf(anioActual) },
+                null
             );
         }
+    }
+
+    // Devuelve el texto de messages.properties para la clave indicada
+    private String texto(String clave) {
+        return messageSource.getMessage(
+            clave, null, LocaleContextHolder.getLocale()
+        );
     }
 }

@@ -40,7 +40,8 @@
                 </tr>
 
                 <tr th:if="${#lists.isEmpty(autores)}">
-                    <td colspan="3" class="text-center text-secondary py-4">
+                    <td colspan="3" class="text-center text-secondary py-4"
+                        th:text="#{autor.listado.vacio}">
                         No hay autores registrados.
                     </td>
                 </tr>
