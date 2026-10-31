@@ -1,5 +1,7 @@
 package com.biblioteca.controller;
 
+import java.time.Year;
+
 import com.biblioteca.model.Libro;
 import com.biblioteca.repository.AutorRepository;
 import com.biblioteca.repository.LibroRepository;
@@ -82,6 +84,8 @@ public class LibroController {
             );
         }
 
+        validarAnio(libro, resultado);
+
         if (resultado.hasErrors()) {
             model.addAttribute("autores", autorRepository.findAll());
             return "libro-form";
@@ -135,6 +139,8 @@ public class LibroController {
                 "Ya existe otro libro con ese ISBN."
             );
         }
+
+        validarAnio(formulario, resultado);
 
         if (resultado.hasErrors()) {
             formulario.setId(id);
@@ -198,5 +204,21 @@ public class LibroController {
         }
 
         return "redirect:/libros";
+    }
+
+    private void validarAnio(Libro libro, BindingResult resultado) {
+        Integer anio = libro.getAnioPublicacion();
+        int anioActual = Year.now().getValue();
+
+        if (anio != null
+                && !resultado.hasFieldErrors("anioPublicacion")
+                && anio > anioActual) {
+
+            resultado.rejectValue(
+                "anioPublicacion",
+                "anio.futuro",
+                "El año no puede ser posterior a " + anioActual + "."
+            );
+        }
     }
 }

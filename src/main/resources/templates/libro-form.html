@@ -81,7 +81,8 @@
                            th:field="*{anioPublicacion}"
                            class="form-control"
                            th:errorclass="is-invalid"
-                           min="1">
+                           min="1"
+                           th:max="${#temporals.year(#temporals.createNow())}">
 
                     <div class="invalid-feedback"
                          th:errors="*{anioPublicacion}"></div>

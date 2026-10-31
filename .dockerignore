@@ -1,0 +1,10 @@
+# Se excluyen del contexto de Docker: compilados locales, cachés y secretos
+build/
+bin/
+.gradle/
+.git/
+.vscode/
+.idea/
+.env
+*.md
+database/
