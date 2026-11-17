@@ -9,6 +9,10 @@ import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
@@ -35,6 +39,16 @@ public class Usuario {
 
     @Column(name = "fecha_alta", nullable = false)
     private LocalDate fechaAlta;
+
+    @Column(nullable = false, length = 255)
+    private String password;
+
+    @Column(nullable = false)
+    private boolean activo;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "rol_id", nullable = false)
+    private Rol rol;
 
     public Usuario() {
     }
@@ -93,5 +107,29 @@ public class Usuario {
 
     public void setFechaAlta(LocalDate fechaAlta) {
         this.fechaAlta = fechaAlta;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
     }
 }

@@ -1,5 +1,13 @@
 USE biblioteca;
 
+CREATE TABLE roles (
+    id_rol BIGINT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(30) NOT NULL,
+
+    PRIMARY KEY (id_rol),
+    CONSTRAINT uq_roles_nombre UNIQUE (nombre)
+);
+
 CREATE TABLE usuarios (
     id_usuario BIGINT NOT NULL AUTO_INCREMENT,
     dni VARCHAR(9) NOT NULL,
@@ -8,10 +16,15 @@ CREATE TABLE usuarios (
     email VARCHAR(150) NOT NULL,
     telefono VARCHAR(20),
     fecha_alta DATE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    activo BIT(1) NOT NULL DEFAULT b'1',
+    rol_id BIGINT NOT NULL,
 
     PRIMARY KEY (id_usuario),
     CONSTRAINT uq_usuarios_dni UNIQUE (dni),
-    CONSTRAINT uq_usuarios_email UNIQUE (email)
+    CONSTRAINT uq_usuarios_email UNIQUE (email),
+    CONSTRAINT fk_usuarios_rol
+        FOREIGN KEY (rol_id) REFERENCES roles (id_rol)
 );
 
 CREATE TABLE autores (

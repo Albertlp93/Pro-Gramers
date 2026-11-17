@@ -42,34 +42,41 @@ WHERE l.isbn = '9788420412146'
   AND a.nombre = 'Miguel'
   AND a.apellidos = 'de Cervantes Saavedra';
 
+INSERT INTO roles (nombre)
+VALUES ('ROLE_ADMIN'), ('ROLE_USER');
+
+SET @rol_user_id = (
+    SELECT id_rol FROM roles WHERE nombre = 'ROLE_USER'
+);
+
 -- Usuarios de ejemplo:
 INSERT INTO usuarios (
-    dni, nombre, apellidos, email, telefono, fecha_alta
+    dni, nombre, apellidos, email, telefono, fecha_alta, password, activo, rol_id
 )
 VALUES
     (
         '12345678Z', 'Laura', 'Martínez Soler',
-        'laura.martinez@example.com', '612 345 678', '2026-09-01'
+        'laura.martinez@example.com', '612 345 678', '2026-09-01', '!', b'0', @rol_user_id
     ),
     (
         '23456789D', 'Jordi', 'Puig Ferrer',
-        'jordi.puig@example.com', '634 128 905', '2026-09-01'
+        'jordi.puig@example.com', '634 128 905', '2026-09-01', '!', b'0', @rol_user_id
     ),
     (
         '34567890V', 'Ana', 'Ruiz Gómez',
-        'ana.ruiz@example.com', '655 902 341', '2026-09-02'
+        'ana.ruiz@example.com', '655 902 341', '2026-09-02', '!', b'0', @rol_user_id
     ),
     (
         '45678901G', 'Marc', 'Vidal Casas',
-        'marc.vidal@example.com', '677 410 236', '2026-09-03'
+        'marc.vidal@example.com', '677 410 236', '2026-09-03', '!', b'0', @rol_user_id
     ),
     (
         '56789012B', 'Carmen', 'López Navarro',
-        'carmen.lopez@example.com', '698 553 017', '2026-09-04'
+        'carmen.lopez@example.com', '698 553 017', '2026-09-04', '!', b'0', @rol_user_id
     ),
     (
         '67890123B', 'David', 'Sánchez Rey',
-        'david.sanchez@example.com', '620 774 589', '2026-09-05'
+        'david.sanchez@example.com', '620 774 589', '2026-09-05', '!', b'0', @rol_user_id
     );
 
 -- Prestamos de ejemplo: 
