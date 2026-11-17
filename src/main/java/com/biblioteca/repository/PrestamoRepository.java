@@ -12,4 +12,6 @@ public interface PrestamoRepository
     @Override
     @EntityGraph(attributePaths = {"usuario", "libro"})
     List<Prestamo> findAll();
+    @EntityGraph(attributePaths = {"libro"})
+    List<Prestamo> findByUsuarioEmailOrderByFechaPrestamoDesc(String email);
 }
