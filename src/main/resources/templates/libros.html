@@ -35,7 +35,7 @@
             <p class="text-secondary">Catálogo de la biblioteca</p>
         </div>
 
-        <a th:href="@{/libros/nuevo}" class="btn btn-primary"
+        <a th:href="@{/admin/libros/nuevo}" class="btn btn-primary"
            th:text="#{libro.boton.nuevo}">
             Nuevo libro
         </a>
@@ -87,7 +87,7 @@
                     
                     <td>
                         <div class="d-flex gap-2">
-                            <a th:href="@{/libros/{id}/editar(id=${libro.id})}"
+                            <a th:href="@{/admin/libros/{id}/editar(id=${libro.id})}"
                             class="btn btn-sm btn-outline-primary"
                             th:text="#{boton.editar}">
                                 Editar
@@ -97,7 +97,7 @@
                                     class="btn btn-sm btn-outline-danger"
                                     data-bs-toggle="modal"
                                     data-bs-target="#modalEliminar"
-                                    th:data-url="@{/libros/{id}/eliminar(id=${libro.id})}"
+                                    th:data-url="@{/admin/libros/{id}/eliminar(id=${libro.id})}"
                                     th:data-titulo="${libro.titulo}"
                                     th:text="#{boton.eliminar}">
                                 Eliminar
@@ -152,6 +152,7 @@
                     </button>
 
                     <form id="formEliminar" method="post" action="#">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                         <button type="submit" class="btn btn-danger"
                                 th:text="#{boton.eliminar}">
                             Eliminar

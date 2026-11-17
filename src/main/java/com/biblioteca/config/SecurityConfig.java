@@ -5,7 +5,6 @@ import com.biblioteca.repository.UsuarioRepository;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,11 +42,6 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/error", "/login", "/registro").permitAll()
                 .requestMatchers("/admin/**").hasAuthority(Rol.ADMIN)
                 .requestMatchers("/user/**").hasAuthority(Rol.USER)
-                // Protege el CRUD mientras siga en sus rutas del Producto 2.
-                .requestMatchers(HttpMethod.POST, "/libros/**")
-                    .hasAuthority(Rol.ADMIN)
-                .requestMatchers("/libros/nuevo", "/libros/*/editar")
-                    .hasAuthority(Rol.ADMIN)
                 .anyRequest().authenticated()
             )
             .formLogin(login -> login
