@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,7 +37,8 @@
         </div>
 
         <a th:href="@{/admin/libros/nuevo}" class="btn btn-primary"
-           th:text="#{libro.boton.nuevo}">
+            sec:authorize="hasAuthority('ROLE_ADMIN')"
+            th:text="#{libro.boton.nuevo}">
             Nuevo libro
         </a>
     </div>
@@ -52,7 +54,7 @@
                     <th scope="col">Año</th>
                     <th scope="col">Editorial</th>
                     <th scope="col">Ejemplares disponibles</th>
-                    <th scope="col">Acciones</th>
+                    <th scope="col" sec:authorize="hasAuthority('ROLE_ADMIN')">Acciones</th>
                 </tr>
                 </thead>
 
@@ -85,7 +87,7 @@
                     
                     
                     
-                    <td>
+                    <td sec:authorize="hasAuthority('ROLE_ADMIN')">
                         <div class="d-flex gap-2">
                             <a th:href="@{/admin/libros/{id}/editar(id=${libro.id})}"
                             class="btn btn-sm btn-outline-primary"
