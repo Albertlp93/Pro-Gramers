@@ -13,4 +13,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByDni(String dni);
+
+    // Zona /user: usuario con su rol y sus libros favoritos ya cargados.
+    @EntityGraph(attributePaths = {"rol", "favoritos"})
+    Optional<Usuario> findConFavoritosByEmail(String email);
 }

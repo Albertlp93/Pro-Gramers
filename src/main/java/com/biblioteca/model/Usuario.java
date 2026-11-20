@@ -8,10 +8,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 @Table(name = "usuarios")
@@ -50,7 +57,34 @@ public class Usuario {
     @JoinColumn(name = "rol_id", nullable = false)
     private Rol rol;
 
+    // Relación 1:N con Prestamo (lado inverso; el propietario es Prestamo.usuario).
+    @OneToMany(mappedBy = "usuario")
+    private List<Prestamo> prestamos = new ArrayList<>();
+
+    // Relación nueva del producto 3: libros favoritos del usuario (N:M con Libro).
+    @ManyToMany
+    @JoinTable(
+        name = "usuario_libro_favorito",
+        joinColumns = @JoinColumn(name = "usuario_id"),
+        inverseJoinColumns = @JoinColumn(name = "libro_id")
+    )
+    private Set<Libro> favoritos = new HashSet<>();
+
     public Usuario() {
+    }
+
+    public boolean esAdmin() {
+        return rol != null && Rol.ADMIN.equals(rol.getNombre());
+    }
+
+    public void agregarFavorito(Libro libro) {
+        favoritos.add(libro);
+        libro.getUsuariosFavorito().add(this);
+    }
+
+    public void quitarFavorito(Libro libro) {
+        favoritos.remove(libro);
+        libro.getUsuariosFavorito().remove(this);
     }
 
     public Long getId() {
@@ -131,5 +165,21 @@ public class Usuario {
 
     public void setRol(Rol rol) {
         this.rol = rol;
+    }
+
+    public List<Prestamo> getPrestamos() {
+        return prestamos;
+    }
+
+    public void setPrestamos(List<Prestamo> prestamos) {
+        this.prestamos = prestamos;
+    }
+
+    public Set<Libro> getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(Set<Libro> favoritos) {
+        this.favoritos = favoritos;
     }
 }
