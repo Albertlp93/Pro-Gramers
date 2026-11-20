@@ -21,6 +21,7 @@
           <li class="nav-item" sec:authorize="hasAuthority('ROLE_ADMIN')"><a class="nav-link" th:href="@{/usuarios}" th:classappend="${activo == 'usuarios'} ? 'active'"><i class="bi bi-people me-1"></i><span th:text="#{menu.usuarios}">Usuarios</span></a></li>
           <li class="nav-item" sec:authorize="hasAuthority('ROLE_ADMIN')"><a class="nav-link" th:href="@{/prestamos}" th:classappend="${activo == 'prestamos'} ? 'active'"><i class="bi bi-arrow-left-right me-1"></i><span th:text="#{menu.prestamos}">Préstamos</span></a></li>
           <li class="nav-item" sec:authorize="hasAuthority('ROLE_USER')"><a class="nav-link" th:href="@{/user/prestamos}" th:classappend="${activo == 'misprestamos'} ? 'active'"><i class="bi bi-journal-bookmark me-1"></i><span th:text="#{menu.misPrestamos}">Mis préstamos</span></a></li>
+          <li class="nav-item" sec:authorize="hasAuthority('ROLE_USER')"><a class="nav-link" th:href="@{/user/favoritos}" th:classappend="${activo == 'misfavoritos'} ? 'active'"><i class="bi bi-star me-1"></i><span th:text="#{menu.misFavoritos}">Mis favoritos</span></a></li>
         </ul>
         <div class="d-flex align-items-center gap-2 ms-lg-3" sec:authorize="isAuthenticated()">
           <span class="navbar-text small">

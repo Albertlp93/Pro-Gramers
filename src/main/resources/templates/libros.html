@@ -55,6 +55,8 @@
                     <th scope="col">Editorial</th>
                     <th scope="col">Ejemplares disponibles</th>
                     <th scope="col" sec:authorize="hasAuthority('ROLE_ADMIN')">Acciones</th>
+                    <th scope="col" sec:authorize="hasAuthority('ROLE_USER')"
+                        th:text="#{favorito.columna}">Favorito</th>
                 </tr>
                 </thead>
 
@@ -87,6 +89,19 @@
                     
                     
                     
+                    <td sec:authorize="hasAuthority('ROLE_USER')">
+                        <form th:action="@{/user/favoritos/{id}(id=${libro.id})}" method="post">
+                            <input type="hidden" name="origen" value="libros">
+                            <button type="submit"
+                                    class="btn btn-sm btn-link text-warning p-0 fs-5"
+                                    th:with="esFavorito=${favoritosIds.contains(libro.id)}"
+                                    th:title="${esFavorito} ? #{favorito.boton.quitar} : #{favorito.boton.marcar}"
+                                    th:attr="aria-label=${esFavorito} ? #{favorito.boton.quitar} : #{favorito.boton.marcar}">
+                                <i class="bi" th:classappend="${esFavorito} ? 'bi-star-fill' : 'bi-star'"></i>
+                            </button>
+                        </form>
+                    </td>
+
                     <td sec:authorize="hasAuthority('ROLE_ADMIN')">
                         <div class="d-flex gap-2">
                             <a th:href="@{/admin/libros/{id}/editar(id=${libro.id})}"

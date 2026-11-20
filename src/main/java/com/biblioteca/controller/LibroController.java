@@ -1,10 +1,13 @@
 package com.biblioteca.controller;
 
+import java.security.Principal;
 import java.time.Year;
+import java.util.Set;
 
 import com.biblioteca.model.Libro;
 import com.biblioteca.repository.AutorRepository;
 import com.biblioteca.repository.LibroRepository;
+import com.biblioteca.service.FavoritoService;
 
 import jakarta.validation.Valid;
 
@@ -33,15 +36,18 @@ public class LibroController {
     private final LibroRepository libroRepository;
     private final AutorRepository autorRepository;
     private final MessageSource messageSource;
+    private final FavoritoService favoritoService;
 
     public LibroController(
             LibroRepository libroRepository,
             AutorRepository autorRepository,
-            MessageSource messageSource) {
+            MessageSource messageSource,
+            FavoritoService favoritoService) {
 
         this.libroRepository = libroRepository;
         this.autorRepository = autorRepository;
         this.messageSource = messageSource;
+        this.favoritoService = favoritoService;
     }
 
     @InitBinder("libro")
@@ -58,8 +64,15 @@ public class LibroController {
     }
 
     @GetMapping("/libros")
-    public String listar(Model model) {
+    public String listar(Principal principal, Model model) {
         model.addAttribute("libros", libroRepository.findAll());
+
+        // Ids de los favoritos del usuario para marcar la estrella en la vista.
+        Set<Long> favoritos = principal == null
+            ? Set.of()
+            : favoritoService.idsFavoritos(principal.getName());
+        model.addAttribute("favoritosIds", favoritos);
+
         return "libros";
     }
 
