@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 @Controller
-@RequestMapping("/libros")
 public class LibroController {
 
     private final LibroRepository libroRepository;
@@ -59,13 +57,13 @@ public class LibroController {
         );
     }
 
-    @GetMapping
+    @GetMapping("/libros")
     public String listar(Model model) {
         model.addAttribute("libros", libroRepository.findAll());
         return "libros";
     }
 
-    @GetMapping("/nuevo")
+    @GetMapping("/admin/libros/nuevo")
     public String nuevo(Model model) {
         model.addAttribute("libro", new Libro());
         model.addAttribute("autores", autorRepository.findAll());
@@ -73,7 +71,7 @@ public class LibroController {
         return "libro-form";
     }
 
-    @PostMapping("/guardar")
+    @PostMapping("/admin/libros/guardar")
     public String guardar(
             @Valid @ModelAttribute("libro") Libro libro,
             BindingResult resultado,
@@ -106,7 +104,7 @@ public class LibroController {
         return "redirect:/libros";
     }
 
-    @GetMapping("/{id}/editar")
+    @GetMapping("/admin/libros/{id}/editar")
         public String editar(@PathVariable Long id, Model model) {
             Libro libro = libroRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -120,7 +118,7 @@ public class LibroController {
             return "libro-form";
         }
 
-    @PostMapping("/{id}/guardar")
+    @PostMapping("/admin/libros/{id}/guardar")
     public String actualizar(
             @PathVariable Long id,
             @Valid @ModelAttribute("libro") Libro formulario,
@@ -172,7 +170,7 @@ public class LibroController {
         return "redirect:/libros";
     }
 
-    @PostMapping("/{id}/eliminar")
+    @PostMapping("/admin/libros/{id}/eliminar")
     public String eliminar(
             @PathVariable Long id,
             RedirectAttributes redirectAttributes) {
