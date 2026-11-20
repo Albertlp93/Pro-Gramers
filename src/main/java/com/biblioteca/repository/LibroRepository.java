@@ -20,6 +20,10 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
     @EntityGraph(attributePaths = "autores")
     Optional<Libro> findById(Long id);
 
+    // Libros favoritos de un usuario, con sus autores ya cargados.
+    @EntityGraph(attributePaths = "autores")
+    List<Libro> findByUsuariosFavoritoEmailOrderByTituloAsc(String email);
+
     boolean existsByIsbn(String isbn);
 
     boolean existsByIsbnAndIdNot(String isbn, Long id);
