@@ -69,6 +69,15 @@ Para consultar los mensajes de la aplicación:
 
 Los scripts de `database/` solo se ejecutan cuando el volumen está vacío. Si se modifica `schema.sql` o `data.sql`, hay que usar `docker compose down -v` para aplicarlos.
 
+### 6. Actualizar desde el producto 2 (producto 3):
+El producto 3 añade a la base de datos la tabla `roles`, los campos `password`, `activo` y `rol_id` en `usuarios` y la tabla `usuario_libro_favorito`. Si ya se había arrancado el producto 2, hay dos opciones:
+- Recrear la base de datos (se pierden los datos): `docker compose down -v` y después `docker compose up -d --build`.
+- Conservar los datos: ejecutar una vez `database/migracion_producto3.sql` sobre la base de datos existente.
+
+Usuarios de demostración (contraseñas cifradas con BCrypt en `data.sql`):
+- Administrador: `admin@biblioteca.com` / `Admin2026Biblio`
+- Usuarios: cualquiera de los usuarios de ejemplo (por ejemplo `laura.martinez@example.com`) / `Usuario2026Biblio`
+
 
 ## Ejecutar con Gradle (desarrollo):
 La aplicación usa el MySQL de Docker Compose, publicado en `localhost:3307`.

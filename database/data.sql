@@ -48,6 +48,24 @@ VALUES ('ROLE_ADMIN'), ('ROLE_USER');
 SET @rol_user_id = (
     SELECT id_rol FROM roles WHERE nombre = 'ROLE_USER'
 );
+SET @rol_admin_id = (
+    SELECT id_rol FROM roles WHERE nombre = 'ROLE_ADMIN'
+);
+
+-- Contraseñas de demostración cifradas con BCrypt (coste 10):
+--   admin@biblioteca.com -> Admin2026Biblio
+--   usuarios de ejemplo  -> Usuario2026Biblio
+SET @hash_admin = '$2a$10$ph.xPpuRDhBVGVu6c/3yFO0a6iBz18PxLZvJWCGHLkp8DLUzdKDia';
+SET @hash_user = '$2a$10$TLTNunMLQHTGLkIUudH8yezwVt0KUnZEIMpspkPB9ncUHL.Znkw2S';
+
+-- Administrador de la biblioteca:
+INSERT INTO usuarios (
+    dni, nombre, apellidos, email, telefono, fecha_alta, password, activo, rol_id
+)
+VALUES (
+    '00000000T', 'Admin', 'Biblioteca',
+    'admin@biblioteca.com', NULL, '2026-09-01', @hash_admin, b'1', @rol_admin_id
+);
 
 -- Usuarios de ejemplo:
 INSERT INTO usuarios (
@@ -56,28 +74,36 @@ INSERT INTO usuarios (
 VALUES
     (
         '12345678Z', 'Laura', 'Martínez Soler',
-        'laura.martinez@example.com', '612 345 678', '2026-09-01', '!', b'0', @rol_user_id
+        'laura.martinez@example.com', '612 345 678', '2026-09-01', @hash_user, b'1', @rol_user_id
     ),
     (
         '23456789D', 'Jordi', 'Puig Ferrer',
-        'jordi.puig@example.com', '634 128 905', '2026-09-01', '!', b'0', @rol_user_id
+        'jordi.puig@example.com', '634 128 905', '2026-09-01', @hash_user, b'1', @rol_user_id
     ),
     (
         '34567890V', 'Ana', 'Ruiz Gómez',
-        'ana.ruiz@example.com', '655 902 341', '2026-09-02', '!', b'0', @rol_user_id
+        'ana.ruiz@example.com', '655 902 341', '2026-09-02', @hash_user, b'1', @rol_user_id
     ),
     (
         '45678901G', 'Marc', 'Vidal Casas',
-        'marc.vidal@example.com', '677 410 236', '2026-09-03', '!', b'0', @rol_user_id
+        'marc.vidal@example.com', '677 410 236', '2026-09-03', @hash_user, b'1', @rol_user_id
     ),
     (
         '56789012B', 'Carmen', 'López Navarro',
-        'carmen.lopez@example.com', '698 553 017', '2026-09-04', '!', b'0', @rol_user_id
+        'carmen.lopez@example.com', '698 553 017', '2026-09-04', @hash_user, b'1', @rol_user_id
     ),
     (
         '67890123B', 'David', 'Sánchez Rey',
-        'david.sanchez@example.com', '620 774 589', '2026-09-05', '!', b'0', @rol_user_id
+        'david.sanchez@example.com', '620 774 589', '2026-09-05', @hash_user, b'1', @rol_user_id
     );
+
+-- Libros favoritos de ejemplo (relación N:M Usuario-Libro):
+INSERT INTO usuario_libro_favorito (usuario_id, libro_id)
+SELECT u.id_usuario, l.id_libro
+FROM usuarios u
+CROSS JOIN libros l
+WHERE u.email IN ('laura.martinez@example.com', 'marc.vidal@example.com')
+  AND l.isbn = '9788420412146';
 
 -- Prestamos de ejemplo: 
 START TRANSACTION;

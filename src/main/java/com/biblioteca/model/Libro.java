@@ -77,6 +77,10 @@ public class Libro {
     )
     private Set<Autor> autores = new HashSet<>();
 
+    // Lado inverso de la relación N:M de favoritos (la gestiona Usuario).
+    @ManyToMany(mappedBy = "favoritos")
+    private Set<Usuario> usuariosFavorito = new HashSet<>();
+
     public Libro() {
     }
 
@@ -142,5 +146,13 @@ public class Libro {
 
     public void setAutores(Set<Autor> autores) {
         this.autores = autores;
+    }
+
+    public Set<Usuario> getUsuariosFavorito() {
+        return usuariosFavorito;
+    }
+
+    public void setUsuariosFavorito(Set<Usuario> usuariosFavorito) {
+        this.usuariosFavorito = usuariosFavorito;
     }
 }
